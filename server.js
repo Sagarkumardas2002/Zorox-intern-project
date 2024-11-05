@@ -18,8 +18,25 @@ connectDB();
 //rest object 
 const app = express();
 
-//middlewares
-app.use(cors());
+// CORS configuration
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://zorox-intern-project.vercel.app/'
+];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true // If your frontend needs to include credentials (like cookies)
+};
+
+// Apply middlewares
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan('dev'));
 
