@@ -65,7 +65,7 @@ const CartPage = () => {
     // Get payment gateway token
     const getToken = async () => {
         try {
-            const { data } = await axios.get("/api/v1/product/braintree/token");
+            const { data } = await axios.get("https://zorox-intern-project.onrender.com/api/v1/product/braintree/token");
             setClientToken(data?.clientToken);
         } catch (error) {
             console.log(error);
@@ -81,7 +81,7 @@ const CartPage = () => {
         try {
             setLoading(true);
             const { nonce } = await instance.requestPaymentMethod();
-            const { data } = await axios.post("/api/v1/product/braintree/payment", {
+            const { data } = await axios.post("https://zorox-intern-project.onrender.com/api/v1/product/braintree/payment", {
                 nonce,
                 cart,
             });
@@ -124,7 +124,7 @@ const CartPage = () => {
                             <div className="row mb-2 m-1 p-3 card flex-md-row flex-column align-items-center" key={p._id} style={{ backgroundColor: "#F2F2F2" }}>
                                 <div className="col-md-4 mb-2 mb-md-0">
                                     <img
-                                        src={`/api/v1/product/product-photo/${p._id}`}
+                                        src={`https://zorox-intern-project.onrender.com/api/v1/product/product-photo/${p._id}`}
                                         className="card-img-top mt-3 mb-3"
                                         alt={p.name}
                                         style={{ maxWidth: "100%", borderRadius: "4px", height: "auto", transition: "transform 0.2s ease-in-out" }}
