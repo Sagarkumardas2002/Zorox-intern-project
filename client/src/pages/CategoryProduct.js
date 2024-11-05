@@ -41,8 +41,7 @@ const CategoryProduct = () => {
                                     width: "18rem", 
                                     borderRadius: "8px",
                                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", 
-                                    transition: "transform 0.2s, box-shadow 0.2s",
-                                    backgroundColor: "orange"
+                                    transition: "transform 0.2s, box-shadow 0.2s"
                                 }}
                                 onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
                                 onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
