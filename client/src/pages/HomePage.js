@@ -14,7 +14,6 @@ const HomePage = () => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
 
-    // Get all products for the first page
     const getAllProducts = async () => {
         try {
             setLoading(true);
@@ -27,7 +26,6 @@ const HomePage = () => {
         }
     };
 
-    // Get total count of products
     const getTotal = async () => {
         try {
             const { data } = await axios.get('https://zorox-intern-project.onrender.com/api/v1/product/product-count');
@@ -37,9 +35,8 @@ const HomePage = () => {
         }
     };
 
-    // Load more products when the page changes
     const LoadMore = async () => {
-        if (loading) return; // Prevent loading if already in progress
+        if (loading) return;
         try {
             setLoading(true);
             const { data } = await axios.get(`https://zorox-intern-project.onrender.com/api/v1/product/product-list/${page}`);
@@ -62,7 +59,7 @@ const HomePage = () => {
     }, [page]);
 
     return (
-        <Layout title={"Sagar's Ecom App-Shop Now....."}>
+        <Layout title={"Sagar's Ecom App - Shop Now"}>
             <div className="container-fluid row mx-auto">
                 <div className="col-md-12 col-sm-12">
                     <h1 className="text-center mt-4">All Products</h1>
@@ -72,29 +69,72 @@ const HomePage = () => {
                                 <div key={index} className="skeleton-card m-3"></div>
                               ))
                             : products?.map((p) => (
-                                <div key={p._id} className="card m-3" style={{ width: "20rem" }}>
+                                <div 
+                                    key={p._id} 
+                                    className="card m-3" 
+                                    style={{
+                                        width: "18rem", 
+                                        borderRadius: "8px",
+                                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", 
+                                        transition: "transform 0.2s, box-shadow 0.2s"
+                                    }}
+                                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                >
                                     <img
                                         src={`https://zorox-intern-project.onrender.com/api/v1/product/product-photo/${p._id}`}
-                                        className="card-img-top"
                                         alt={p.name}
-                                        style={{ width: '100%', height: '300px', objectFit: 'cover', padding: '1px', borderRadius: "4px" }}
-                                        onMouseOver={(e) => e.target.style.transform = 'scale(0.985)'}
-                                        onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+                                        style={{
+                                            width: '100%',
+                                            height: '250px', // Reduced height for a more compact look
+                                            objectFit: 'cover',
+                                            borderRadius: "8px 8px 0 0",
+                                        }}
                                     />
-                                    <hr style={{ margin: '0px', color: "gray" }} />
-                                    <div className="card-body" style={{ backgroundColor: 'orange', borderRadius: "0 0 3px 3px" }}>
-                                        <h5 className="card-title">{p.name}</h5>
-                                        <p className="card-text">
+                                    <hr style={{ margin: '0px', color: "#e0e0e0" }} />
+                                    <div className="card-body" style={{ 
+                                        backgroundColor: '#f9f9f9', 
+                                        padding: '1rem', 
+                                        borderRadius: "0 0 8px 8px" 
+                                    }}>
+                                        <h5 className="card-title" style={{ fontSize: '1.1rem', fontWeight: '600', color: '#333' }}>{p.name}</h5>
+                                        <p className="card-text" style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>
                                             {p.description.substring(0, 50)}...
                                         </p>
-                                        <h5 className="card-text" style={{ fontWeight: 'bold', color: 'black' }}>₹{p.price}</h5>
+                                        <h5 className="card-text price" style={{ fontWeight: 'bold', color: '#2d3436' }}>₹{p.price}</h5>
                                         <div className='d-flex justify-content-between'>
-                                            <button className="btn btn-primary ms-1 mb-2" onClick={() => navigate(`/product/${p.slug}`)}>MORE DETAILS</button>
-                                            <button className="btn btn-success ms-3 mb-2" onClick={() => {
-                                                setCart([...cart, p]);
-                                                localStorage.setItem("cart", JSON.stringify([...cart, p]));
-                                                toast.success('Item Added to Cart');
-                                            }}>ADD TO CART</button>
+                                            <button 
+                                                className="btn btn-primary ms-1 mb-2" 
+                                                onClick={() => navigate(`/product/${p.slug}`)}
+                                                style={{
+                                                    fontSize: '0.85rem',
+                                                    fontWeight: '500',
+                                                    backgroundColor: '#0056b3',
+                                                    borderColor: '#0056b3',
+                                                }}
+                                                onMouseOver={(e) => e.target.style.backgroundColor = '#004494'}
+                                                onMouseOut={(e) => e.target.style.backgroundColor = '#0056b3'}
+                                            >
+                                                MORE DETAILS
+                                            </button>
+                                            <button 
+                                                className="btn btn-success ms-3 mb-2" 
+                                                onClick={() => {
+                                                    setCart([...cart, p]);
+                                                    localStorage.setItem("cart", JSON.stringify([...cart, p]));
+                                                    toast.success('Item Added to Cart');
+                                                }}
+                                                style={{
+                                                    fontSize: '0.85rem',
+                                                    fontWeight: '500',
+                                                    backgroundColor: '#28a745',
+                                                    borderColor: '#28a745',
+                                                }}
+                                                onMouseOver={(e) => e.target.style.backgroundColor = '#218838'}
+                                                onMouseOut={(e) => e.target.style.backgroundColor = '#28a745'}
+                                            >
+                                                ADD TO CART
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +144,20 @@ const HomePage = () => {
                     <div>
                         {products && products.length < total && (
                             <div className="card m-2" style={{ width: "14rem", backgroundColor: 'transparent', border: 'none' }}>
-                                <button className='deshome btn btn-dark mb-5 mt-3 mx-auto' onClick={() => setPage((prevPage) => prevPage + 1)}>
+                                <button 
+                                    className='deshome btn btn-dark mb-5 mt-3 mx-auto' 
+                                    onClick={() => setPage((prevPage) => prevPage + 1)}
+                                    style={{
+                                        fontSize: '0.9rem',
+                                        fontWeight: '600',
+                                        padding: '0.75rem 1.5rem',
+                                        backgroundColor: '#333',
+                                        color: '#fff',
+                                        border: 'none',
+                                    }}
+                                    onMouseOver={(e) => e.target.style.backgroundColor = '#444'}
+                                    onMouseOut={(e) => e.target.style.backgroundColor = '#333'}
+                                >
                                     {loading ? "Loading..." : "Load More"}
                                 </button>
                             </div>
