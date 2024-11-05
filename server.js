@@ -21,7 +21,7 @@ const app = express();
 // CORS configuration
 const allowedOrigins = [
     'http://localhost:3000',
-    'https://zorox-intern-project.vercel.app/'
+    'https://zorox-intern-project.vercel.app'
 ];
 
 const corsOptions = {
