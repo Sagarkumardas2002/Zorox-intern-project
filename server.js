@@ -22,6 +22,7 @@ const app = express();
 const allowedOrigins = [
     'http://localhost:3000',
     'https://zorox-intern-project.vercel.app/'
+    'https://zorox-intern-project-8uxy2x9tj-ankush-rajs-projects.vercel.app'
 ];
 
 const corsOptions = {
