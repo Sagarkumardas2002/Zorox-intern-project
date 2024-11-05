@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/cart';
 import toast from 'react-hot-toast';
-import './HomePage.css'; // Import CSS file for skeleton styling
+import './HomePage.css';
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -14,26 +14,40 @@ const HomePage = () => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
 
-    // Get all products
+    // Get all products for the first page
     const getAllProducts = async () => {
         try {
             setLoading(true);
             const { data } = await axios.get(`https://zorox-intern-project.onrender.com/api/v1/product/product-list/${page}`);
-            setLoading(false);
             setProducts(data.products);
-        } catch (error) {
             setLoading(false);
+        } catch (error) {
             console.log(error);
+            setLoading(false);
         }
     };
 
-    // Get total count
+    // Get total count of products
     const getTotal = async () => {
         try {
             const { data } = await axios.get('https://zorox-intern-project.onrender.com/api/v1/product/product-count');
             setTotal(data?.total);
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    // Load more products when the page changes
+    const LoadMore = async () => {
+        if (loading) return; // Prevent loading if already in progress
+        try {
+            setLoading(true);
+            const { data } = await axios.get(`https://zorox-intern-project.onrender.com/api/v1/product/product-list/${page}`);
+            setProducts((prevProducts) => [...prevProducts, ...data?.products]);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
         }
     };
 
@@ -47,33 +61,17 @@ const HomePage = () => {
         LoadMore();
     }, [page]);
 
-    // Load more
-    const LoadMore = async () => {
-        try {
-            setLoading(true);
-            const { data } = await axios.get(`https://zorox-intern-project.onrender.com/api/v1/product/product-list/${page}`);
-            setLoading(false);
-            setProducts([...products, ...data?.products]);
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        }
-    };
-
     return (
         <Layout title={"Sagar's Ecom App-Shop Now....."}>
             <div className="container-fluid row mx-auto">
                 <div className="col-md-12 col-sm-12">
                     <h1 className="text-center mt-4">All Products</h1>
                     <div className="d-flex flex-wrap justify-content-center">
-                        {loading ? (
-                            // Display skeleton loaders when loading is true
-                            Array.from({ length: 6 }).map((_, index) => (
+                        {loading && page === 1
+                            ? Array.from({ length: 6 }).map((_, index) => (
                                 <div key={index} className="skeleton-card m-3"></div>
-                            ))
-                        ) : (
-                            // Render products once loading is complete
-                            products?.map((p) => (
+                              ))
+                            : products?.map((p) => (
                                 <div key={p._id} className="card m-3" style={{ width: "20rem" }}>
                                     <img
                                         src={`https://zorox-intern-project.onrender.com/api/v1/product/product-photo/${p._id}`}
@@ -100,16 +98,13 @@ const HomePage = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ))
-                        )}
+                              ))
+                        }
                     </div>
                     <div>
                         {products && products.length < total && (
                             <div className="card m-2" style={{ width: "14rem", backgroundColor: 'transparent', border: 'none' }}>
-                                <button className='deshome btn btn-dark mb-5 mt-3 mx-auto' onClick={(e) => {
-                                    e.preventDefault();
-                                    setPage(page + 1);
-                                }}>
+                                <button className='deshome btn btn-dark mb-5 mt-3 mx-auto' onClick={() => setPage((prevPage) => prevPage + 1)}>
                                     {loading ? "Loading..." : "Load More"}
                                 </button>
                             </div>
