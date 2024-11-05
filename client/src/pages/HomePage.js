@@ -81,17 +81,18 @@ const HomePage = () => {
                                     onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
                                     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                                 >
-                                    <img
-                                        src={`https://zorox-intern-project.onrender.com/api/v1/product/product-photo/${p._id}`}
-                                        alt={p.name}
-                                        style={{
-                                            width: '100%',
-                                            height: '250px', // Reduced height for a more compact look
-                                            objectFit: 'cover',
-                                            borderRadius: "8px 8px 0 0",
-                                        }}
-                                    />
-                                    <hr style={{ margin: '0px', color: "#e0e0e0" }} />
+                                    <div style={{ padding: '10px' }}> {/* Adjusting padding for better image containment */}
+                                        <img
+                                            src={`https://zorox-intern-project.onrender.com/api/v1/product/product-photo/${p._id}`}
+                                            alt={p.name}
+                                            style={{
+                                                width: '100%',
+                                                height: '220px', // Slightly smaller height for better fit
+                                                objectFit: 'contain', // 'contain' to avoid cropping any part of the image
+                                                borderRadius: "6px",
+                                            }}
+                                        />
+                                    </div>
                                     <div className="card-body" style={{ 
                                         backgroundColor: '#f9f9f9', 
                                         padding: '1rem', 
