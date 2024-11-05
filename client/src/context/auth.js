@@ -10,6 +10,7 @@ const AuthProvider = ({ children }) => {
     });
 
     //default axios
+    axios.defaults.baseURL = 'https://zorox-intern-project.onrender.com'
     axios.defaults.headers.common['Authorization'] = auth?.token
 
     useEffect(() => {
